@@ -1,0 +1,32 @@
+.article-content {
+  /* 基础样式 */
+  font-size: 20px;
+  line-height: 2;
+  color: #222;
+}
+
+.article-content img {
+  /* 图片样式 */
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 2em auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.article-content p {
+  /* 段落样式 */
+  margin: 1.5em 0;
+}
+
+/* 确保图片前后有足够的空间 */
+.article-content p:has(img) {
+  margin: 2em 0;
+}
+
+/* 如果浏览器不支持 :has 选择器，使用这个备选方案 */
+.article-content img + p,
+.article-content p + img {
+  margin-top: 2em;
+} 
