@@ -27,8 +27,26 @@ export default function ArticleDetail() {
       <Content style={{ padding: 0, margin: 0 }}>
         <div style={{ width: '100%', minHeight: '100vh', background: '#fff' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '40px 24px 0 24px' }}>
-            <Button type="link" onClick={() => navigate('/')} style={{ marginBottom: 24, fontSize: 16 }}>
-              ← 返回首页
+            <Button 
+              type="primary"
+              onClick={() => navigate('/')} 
+              style={{ 
+                marginBottom: 24, 
+                fontSize: 16,
+                height: 'auto',
+                padding: '8px 20px',
+                display: 'flex',
+                alignItems: 'center',
+                borderRadius: '20px',
+                background: '#1677ff',
+                boxShadow: '0 2px 8px rgba(22, 119, 255, 0.2)',
+                transition: 'all 0.3s'
+              }}
+              onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'}
+              onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
+            >
+              
+              返回首页
             </Button>
             {/* 封面图 */}
             {article.cover && (

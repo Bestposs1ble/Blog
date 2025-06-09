@@ -1,0 +1,182 @@
+/* 黑夜模式样式 */
+body.dark-theme {
+  background-color: #121212 !important;
+  color: #e4e4e4 !important;
+}
+
+/* 导航栏暗色样式 */
+body.dark-theme .ant-layout-header {
+  background-color: #1e1e1e !important;
+  border-bottom: 1px solid #303030 !important;
+}
+
+/* 内容区域暗色样式 */
+body.dark-theme .ant-layout-content {
+  background-color: #121212 !important;
+}
+
+/* 卡片暗色样式 */
+body.dark-theme .ant-card {
+  background-color: #1e1e1e !important;
+  border: 1px solid #303030 !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 文字颜色调整 */
+body.dark-theme .ant-card-meta-title,
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4,
+body.dark-theme h5,
+body.dark-theme h6 {
+  color: #ffffff !important;
+}
+
+/* 文章内容暗色样式 */
+body.dark-theme .article-content {
+  color: #e4e4e4 !important;
+}
+
+/* 页脚暗色样式 */
+body.dark-theme .ant-layout-footer {
+  background-color: #1e1e1e !important;
+  color: #888 !important;
+  border-top: 1px solid #303030 !important;
+}
+
+/* 按钮暗色样式 */
+body.dark-theme .ant-btn {
+  background-color: #2d2d2d !important;
+  border-color: #404040 !important;
+  color: #e4e4e4 !important;
+}
+
+body.dark-theme .ant-btn:hover {
+  background-color: #404040 !important;
+  border-color: #505050 !important;
+}
+
+/* 标签暗色样式 */
+body.dark-theme .ant-tag {
+  background-color: #2d2d2d !important;
+  border-color: #404040 !important;
+  color: #e4e4e4 !important;
+}
+
+/* 链接暗色样式 */
+body.dark-theme a {
+  color: #4a9eff !important;
+}
+
+body.dark-theme a:hover {
+  color: #69b1ff !important;
+}
+
+/* 菜单暗色样式 */
+body.dark-theme .ant-menu {
+  background-color: transparent !important;
+  color: #e4e4e4 !important;
+  border-bottom: none !important;
+}
+
+body.dark-theme .ant-menu-item {
+  color: #e4e4e4 !important;
+}
+
+body.dark-theme .ant-menu-item:hover {
+  color: #4a9eff !important;
+}
+
+body.dark-theme .ant-menu-item-selected {
+  color: #4a9eff !important;
+}
+
+/* 下拉菜单暗色样式 */
+body.dark-theme .ant-select-dropdown {
+  background-color: #1e1e1e !important;
+  border: 1px solid #303030 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 模态框暗色样式 */
+body.dark-theme .ant-modal-content,
+body.dark-theme .ant-modal-header {
+  background-color: #1e1e1e !important;
+  color: #e4e4e4 !important;
+  border: 1px solid #303030 !important;
+}
+
+/* 分页器暗色样式 */
+body.dark-theme .ant-pagination {
+  color: #a8a8a8;
+}
+
+body.dark-theme .ant-pagination-item {
+  background-color: #2d2d2d !important;
+  border-color: #404040 !important;
+}
+
+body.dark-theme .ant-pagination-item a {
+  color: #e4e4e4 !important;
+}
+
+body.dark-theme .ant-pagination-item:hover {
+  border-color: #177ddc !important;
+}
+
+body.dark-theme .ant-pagination-item:hover a {
+  color: #177ddc !important;
+}
+
+body.dark-theme .ant-pagination-item-active {
+  background-color: #177ddc !important;
+  border-color: #177ddc !important;
+}
+
+body.dark-theme .ant-pagination-item-active a {
+  color: #fff !important;
+}
+
+body.dark-theme .ant-pagination-prev .ant-pagination-item-link,
+body.dark-theme .ant-pagination-next .ant-pagination-item-link {
+  background-color: #2d2d2d !important;
+  border-color: #404040 !important;
+  color: #e4e4e4 !important;
+}
+
+body.dark-theme .ant-pagination-prev:hover .ant-pagination-item-link,
+body.dark-theme .ant-pagination-next:hover .ant-pagination-item-link {
+  border-color: #177ddc !important;
+  color: #177ddc !important;
+}
+
+body.dark-theme .ant-pagination-disabled .ant-pagination-item-link,
+body.dark-theme .ant-pagination-disabled:hover .ant-pagination-item-link {
+  background-color: #1e1e1e !important;
+  border-color: #303030 !important;
+  color: #666 !important;
+}
+
+/* Radio按钮暗色样式 */
+body.dark-theme .ant-radio-button-wrapper {
+  background-color: #2d2d2d !important;
+  border-color: #404040 !important;
+  color: #e4e4e4 !important;
+}
+
+body.dark-theme .ant-radio-button-wrapper:hover {
+  color: #177ddc !important;
+}
+
+body.dark-theme .ant-radio-button-wrapper-checked {
+  background-color: #177ddc !important;
+  border-color: #177ddc !important;
+  color: #fff !important;
+}
+
+body.dark-theme .ant-radio-button-wrapper-checked:hover {
+  background-color: #177ddc !important;
+  border-color: #177ddc !important;
+  color: #fff !important;
+} 
