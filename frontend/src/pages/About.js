@@ -31,17 +31,19 @@ export default function About() {
         </div>
         {/* 你可以加更多联系方式 */}
         <div style={{ margin: '16px 0' }}>
-          <b>微信/QQ：</b>
-          <img src="/your-qr-code.png" alt="二维码" width={120} style={{ display: 'block', margin: '12px auto' }} />
+          
         </div>
         <Divider />
         <div>
-          <b>社交：</b>
-          <a href="https://github.com/" target="_blank" rel="noopener noreferrer" style={{ marginLeft: 8 }}>
-            <Avatar src="/github-icon.png" size={32} />
-          </a>
+          
           {/* 你可以加更多社交图标 */}
         </div>
+        <p>
+          GitHub：
+          <a href="https://github.com/Bestposs1ble" target="_blank" rel="noopener noreferrer">
+            @Bestposs1ble
+          </a>
+        </p>
       </Card>
     </div>
   );

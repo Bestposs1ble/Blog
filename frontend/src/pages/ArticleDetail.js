@@ -3,6 +3,7 @@ import { Layout, Button, Tag, Avatar } from 'antd';
 import { useParams, useNavigate } from 'react-router-dom';
 import instance from '../api';
 import '../styles/ArticleDetail.css';
+import { HeartFilled } from '@ant-design/icons';
 
 const { Content, Footer } = Layout;
 
@@ -11,14 +12,27 @@ export default function ArticleDetail() {
   const navigate = useNavigate();
   const [article, setArticle] = useState(null);
   const [profile, setProfile] = useState({});
+  const [likes, setLikes] = useState(0);
+  const [likeAnim, setLikeAnim] = useState(false);
 
   useEffect(() => {
     instance.get(`/article/${id}`).then(res => {
-      if (res.data.code === 0) setArticle(res.data.data);
-      else navigate('/404');
+      if (res.data.code === 0) {
+        setArticle(res.data.data);
+        setLikes(res.data.data.likes || 0);
+      } else navigate('/404');
     });
     instance.get('/profile').then(res => setProfile(res.data.data || {}));
   }, [id, navigate]);
+
+  const handleLike = () => {
+    setLikeAnim(true);
+    setLikes(likes + 1); // 本地立即+1
+    instance.post(`/article/${id}/like`).then(res => {
+      if (res.data.code === 0) setLikes(res.data.likes);
+    });
+    setTimeout(() => setLikeAnim(false), 500); // 动画500ms
+  };
 
   if (!article) return null;
 
@@ -105,6 +119,26 @@ export default function ArticleDetail() {
               className="article-content"
               dangerouslySetInnerHTML={{ __html: article.content }}
             />
+            {/* 点赞按钮 */}
+            <div style={{ margin: '32px 0', textAlign: 'center' }}>
+              <button
+                className={`like-btn${likeAnim ? ' liked' : ''}`}
+                onClick={handleLike}
+                style={{
+                  border: 'none',
+                  background: 'none',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  fontSize: 32,
+                  color: '#ff4d4f',
+                  position: 'relative'
+                }}
+              >
+                <HeartFilled />
+                <span style={{ marginLeft: 8, fontSize: 20 }}>{likes}</span>
+                <span className="like-effect" />
+              </button>
+            </div>
           </div>
         </div>
       </Content>

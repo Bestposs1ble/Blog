@@ -30,3 +30,31 @@
 .article-content p + img {
   margin-top: 2em;
 }
+
+.like-btn {
+  transition: transform 0.2s;
+  position: relative;
+}
+.like-btn.liked {
+  animation: like-pop 0.5s;
+}
+@keyframes like-pop {
+  0% { transform: scale(1);}
+  50% { transform: scale(1.5);}
+  100% { transform: scale(1);}
+}
+.like-effect {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 40px; height: 40px;
+  pointer-events: none;
+  opacity: 0;
+}
+.like-btn.liked .like-effect {
+  animation: like-burst 0.5s;
+  opacity: 1;
+}
+@keyframes like-burst {
+  0% { opacity: 1; transform: scale(1);}
+  100% { opacity: 0; transform: scale(2);}
+}

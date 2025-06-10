@@ -18,8 +18,12 @@ exports.getById = async (req, res) => {
 
 // 新增文章
 exports.create = async (req, res) => {
-  const { title, content } = req.body;
-  // cover 可能为 undefined/null/空字符串
+  const { title } = req.body;
+  let content = req.body.content;
+  // 先把 </p> 换成换行
+  content = content.replace(/<\/p>/gi, '\n');
+  // 去掉所有 HTML 标签
+  content = content.replace(/<[^>]+>/g, '');
   let cover = req.body.cover;
   if (!cover) cover = null;
   await db.execute(
@@ -32,7 +36,12 @@ exports.create = async (req, res) => {
 // 修改文章
 exports.update = async (req, res) => {
   const { id } = req.params;
-  const { title, content } = req.body;
+  const { title } = req.body;
+  let content = req.body.content;
+  // 先把 </p> 换成换行
+  content = content.replace(/<\/p>/gi, '\n');
+  // 去掉所有 HTML 标签
+  content = content.replace(/<[^>]+>/g, '');
   let cover = req.body.cover;
   if (!cover) cover = null;
   await db.execute(
@@ -47,4 +56,12 @@ exports.remove = async (req, res) => {
   const { id } = req.params;
   await db.execute('DELETE FROM articles WHERE id=?', [id]);
   res.json({ code: 0, msg: '删除成功' });
+};
+
+// 点赞接口
+exports.like = async (req, res) => {
+  const { id } = req.params;
+  await db.execute('UPDATE articles SET likes = likes + 1 WHERE id = ?', [id]);
+  const [rows] = await db.execute('SELECT likes FROM articles WHERE id = ?', [id]);
+  res.json({ code: 0, likes: rows[0].likes });
 };

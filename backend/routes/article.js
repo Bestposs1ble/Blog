@@ -14,4 +14,7 @@ router.put('/:id', auth, articleController.update);
 // 删除文章（需登录）
 router.delete('/:id', auth, articleController.remove);
 
+// 点赞接口（游客可无限点赞）
+router.post('/:id/like', articleController.like);
+
 module.exports = router;

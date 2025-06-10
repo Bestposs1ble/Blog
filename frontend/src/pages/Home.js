@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Layout, Menu, Card, List, Avatar, Tag, Select, Switch, message, Radio, Dropdown, Pagination } from 'antd';
-import { MoonOutlined, SunOutlined, UserOutlined } from '@ant-design/icons';
+import { MoonOutlined, SunOutlined, UserOutlined, EyeOutlined, HeartFilled } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import instance from '../api';
 import '../styles/DarkMode.css';
@@ -13,6 +13,17 @@ function formatDate(dateStr) {
 }
 
 function ArticleCard({ item, dark }) {
+  const [likes, setLikes] = React.useState(item.likes || 0);
+  const [likeAnim, setLikeAnim] = React.useState(false);
+  const handleLike = (e) => {
+    e.stopPropagation(); // 防止点击卡片跳转
+    setLikeAnim(true);
+    setLikes(likes + 1);
+    instance.post(`/article/${item.id}/like`).then(res => {
+      if (res.data.code === 0) setLikes(res.data.likes);
+    });
+    setTimeout(() => setLikeAnim(false), 500);
+  };
   return (
     <Card
       hoverable
@@ -62,7 +73,7 @@ function ArticleCard({ item, dark }) {
         WebkitLineClamp: 2,
         WebkitBoxOrient: 'vertical'
       }}>
-        {item.content}
+        {item.content.replace(/<[^>]+>/g, '')}
       </div>
       <div style={{
         display: 'flex',
@@ -86,8 +97,31 @@ function ArticleCard({ item, dark }) {
             </Tag>
           )}
         </div>
-        <div>
-          {formatDate(item.created_at)} | 阅读量：{item.views || 0}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <EyeOutlined style={{ fontSize: 18 }} />
+            <span>{item.views || 0}</span>
+          </span>
+          <button
+            className={`like-btn${likeAnim ? ' liked' : ''}`}
+            onClick={handleLike}
+            style={{
+              border: 'none',
+              background: 'none',
+              cursor: 'pointer',
+              outline: 'none',
+              fontSize: 18,
+              color: '#ff4d4f',
+              position: 'relative',
+              display: 'flex',
+              alignItems: 'center',
+              padding: 0
+            }}
+          >
+            <HeartFilled />
+            <span style={{ marginLeft: 4 }}>{likes}</span>
+            <span className="like-effect" />
+          </button>
         </div>
       </div>
     </Card>
@@ -173,7 +207,7 @@ export default function Home() {
             style={{ background: 'transparent', border: 'none' }}
           >
             <Menu.Item key="/"><Link to="/">首页</Link></Menu.Item>
-            <Menu.Item key="/about"><Link to="/about">关于</Link></Menu.Item>
+            <Menu.Item key="/about"><Link to="/about">关于我</Link></Menu.Item>
           </Menu>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
