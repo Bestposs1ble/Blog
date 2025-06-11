@@ -1,22 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Avatar, Divider } from 'antd';
+import { Card, Avatar, Divider, Button } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import instance from '../api';
 
 export default function About() {
   const [profile, setProfile] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
-    instance.get('/profile').then(res => setProfile(res.data.data || {}));
+    instance.get('/api/profile').then(res => setProfile(res.data.data || {}));
   }, []);
+
+  // 获取API基础URL
+  const apiBaseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : 'https://bestpossible.space';
+  const getImageUrl = (path) => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    return `${apiBaseUrl}${path}`;
+  };
 
   return (
     <div style={{ maxWidth: 500, margin: '40px auto', padding: 24 }}>
+      <Button type="primary" onClick={() => navigate('/')} style={{ marginBottom: 24 }}>
+        返回主页
+      </Button>
       <Card
         style={{ borderRadius: 16, boxShadow: '0 2px 12px #f0f1f2', textAlign: 'center' }}
         cover={
           profile.avatar &&
           <Avatar
-            src={`http://localhost:3001${profile.avatar}`}
+            src={getImageUrl(profile.avatar)}
             size={100}
             style={{ margin: '32px auto 0', display: 'block', border: '2px solid #eee' }}
           />

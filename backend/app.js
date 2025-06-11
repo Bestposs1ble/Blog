@@ -6,16 +6,20 @@ const userRoutes = require('./routes/user');
 const articleRoutes = require('./routes/article');
 const profileRoutes = require('./routes/profile');
 const uploadRoutes = require('./routes/upload');
+const logRoutes = require('./routes/log');
+const logger = require('./middleware/logger');
 
 const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(logger);
 
 app.use('/api/user', userRoutes);
 app.use('/api/article', articleRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/log', logRoutes);
 app.use('/uploads', express.static(__dirname + '/public/uploads'));
 
 app.listen(3001, () => {

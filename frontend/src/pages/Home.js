@@ -4,8 +4,19 @@ import { MoonOutlined, SunOutlined, UserOutlined, EyeOutlined, HeartFilled } fro
 import { Link, useNavigate } from 'react-router-dom';
 import instance from '../api';
 import '../styles/DarkMode.css';
+import '../styles/LikeButton.css';
 
 const { Header, Content, Footer } = Layout;
+
+// 获取API基础URL
+const apiBaseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : 'https://bestpossible.space';
+
+// 处理图片URL
+const getImageUrl = (path) => {
+  if (!path) return '';
+  if (path.startsWith('http')) return path;
+  return `${apiBaseUrl}${path}`;
+};
 
 function formatDate(dateStr) {
   const d = new Date(dateStr);
@@ -15,14 +26,19 @@ function formatDate(dateStr) {
 function ArticleCard({ item, dark }) {
   const [likes, setLikes] = React.useState(item.likes || 0);
   const [likeAnim, setLikeAnim] = React.useState(false);
+  const navigate = useNavigate();
+  const [isClicked, setIsClicked] = useState(false);
+  
   const handleLike = (e) => {
     e.stopPropagation(); // 防止点击卡片跳转
     setLikeAnim(true);
+    setIsClicked(true);
     setLikes(likes + 1);
-    instance.post(`/article/${item.id}/like`).then(res => {
+    instance.post(`/api/article/${item.id}/like`).then(res => {
       if (res.data.code === 0) setLikes(res.data.likes);
     });
     setTimeout(() => setLikeAnim(false), 500);
+    setTimeout(() => setIsClicked(false), 600);
   };
   return (
     <Card
@@ -40,13 +56,19 @@ function ArticleCard({ item, dark }) {
       bodyStyle={{ padding: 24 }}
       cover={
         item.cover &&
-        <img
-          alt="cover"
-          src={`http://localhost:3001${item.cover}`}
-          style={{ maxHeight: 220, objectFit: 'cover', width: '100%' }}
+        <div style={{ 
+          width: '100%', 
+          height: 200, 
+          overflow: 'hidden', 
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundImage: `url(${getImageUrl(item.cover)})`,
+          transition: 'all 0.6s'
+        }} 
+        className="article-card-cover"
         />
       }
-      onClick={() => window.location.href = `/article/${item.id}`}
+      onClick={() => navigate(`/article/${item.id}`)}
     >
       <div
         style={{
@@ -103,7 +125,7 @@ function ArticleCard({ item, dark }) {
             <span>{item.views || 0}</span>
           </span>
           <button
-            className={`like-btn${likeAnim ? ' liked' : ''}`}
+            className={`like-btn${likeAnim ? ' liked' : ''}${isClicked ? ' clicked' : ''}`}
             onClick={handleLike}
             style={{
               border: 'none',
@@ -121,6 +143,7 @@ function ArticleCard({ item, dark }) {
             <HeartFilled />
             <span style={{ marginLeft: 4 }}>{likes}</span>
             <span className="like-effect" />
+            <span className="like-btn-ripple" />
           </button>
         </div>
       </div>
@@ -142,8 +165,9 @@ export default function Home() {
   const pageSize = 5; // 每页显示5篇文章
 
   useEffect(() => {
-    instance.get('/profile').then(res => setProfile(res.data.data || {}));
-    instance.get('/article').then(res => setArticles(res.data.data || []));
+    // 获取个人信息和文章列表
+    instance.get('/api/profile').then(res => setProfile(res.data.data || {}));
+    instance.get('/api/article').then(res => setArticles(res.data.data || []));
   }, []);
 
   // 最新/热门文章
@@ -224,7 +248,7 @@ export default function Home() {
           <Dropdown overlay={userMenu} placement="bottomRight">
             <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
               <Avatar
-                src={profile.avatar ? `http://localhost:3001${profile.avatar}` : undefined}
+                src={profile.avatar ? getImageUrl(profile.avatar) : undefined}
                 icon={!profile.avatar && <UserOutlined />}
                 style={{ marginRight: 8 }}
               />

@@ -20,6 +20,8 @@ export default function Admin() {
 
   const navigate = useNavigate();
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   // 权限校验
   useEffect(() => {
     if (!localStorage.getItem('token')) {
@@ -31,7 +33,7 @@ export default function Admin() {
   // 获取文章列表
   const fetchArticles = () => {
     setLoading(true);
-    instance.get('/article').then(res => {
+    instance.get('/api/article').then(res => {
       setLoading(false);
       if (res.data.code === 0) setArticles(res.data.data || []);
       else message.error('获取文章失败');
@@ -40,7 +42,7 @@ export default function Admin() {
 
   // 获取个人信息
   const fetchProfile = () => {
-    instance.get('/profile').then(res => {
+    instance.get('/api/profile').then(res => {
       if (res.data.code === 0) {
         setProfile(res.data.data || {});
         profileForm.setFieldsValue(res.data.data || {});
@@ -59,7 +61,7 @@ export default function Admin() {
       if (!values.cover) values.cover = null;
       if (editing) {
         // 编辑
-        instance.put(`/article/${editing.id}`, values).then(res => {
+        instance.put(`/api/article/${editing.id}`, values).then(res => {
           if (res.data.code === 0) {
             message.success('修改成功');
             setModalOpen(false);
@@ -69,7 +71,7 @@ export default function Admin() {
         });
       } else {
         // 新增
-        instance.post('/article', values).then(res => {
+        instance.post('/api/article', values).then(res => {
           if (res.data.code === 0) {
             message.success('新增成功');
             setModalOpen(false);
@@ -82,7 +84,7 @@ export default function Admin() {
 
   // 删除文章
   const handleDelete = id => {
-    instance.delete(`/article/${id}`).then(res => {
+    instance.delete(`/api/article/${id}`).then(res => {
       if (res.data.code === 0) {
         message.success('删除成功');
         fetchArticles();
@@ -107,7 +109,7 @@ export default function Admin() {
   // 个人信息弹窗保存
   const handleProfileOk = () => {
     profileForm.validateFields().then(values => {
-      instance.put('/profile', values).then(res => {
+      instance.put('/api/profile', values).then(res => {
         if (res.data.code === 0) {
           message.success('保存成功');
           setProfileModalOpen(false);
@@ -121,6 +123,9 @@ export default function Admin() {
     <div style={{ maxWidth: 900, margin: '0 auto', padding: 24 }}>
       {/* 顶部按钮栏 */}
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+        <Button onClick={() => navigate('/logs')} style={{ marginRight: 8 }}>
+          访客统计
+        </Button>
         <Button onClick={() => setProfileModalOpen(true)} style={{ marginRight: 8 }}>
           个人信息
         </Button>
@@ -197,7 +202,7 @@ export default function Admin() {
                         const formData = new FormData();
                         formData.append('file', file);
                         // 上传到后端
-                        const res = await fetch('http://localhost:3001/api/upload', {
+                        const res = await fetch(`${apiUrl}/upload`, {
                           method: 'POST',
                           body: formData
                         });
@@ -205,7 +210,7 @@ export default function Admin() {
                         if (data.code === 0) {
                           const quill = this.quill;
                           const range = quill.getSelection();
-                          quill.insertEmbed(range.index, 'image', `http://localhost:3001${data.url}`);
+                          quill.insertEmbed(range.index, 'image', `${apiUrl.replace('/api','')}${data.url}`);
                         }
                       };
                     }
@@ -228,7 +233,7 @@ export default function Admin() {
                     formData.append('file', file);
                     
                     // 上传图片
-                    fetch('http://localhost:3001/api/upload', {
+                    fetch(`${apiUrl}/upload`, {
                       method: 'POST',
                       body: formData
                     })
@@ -239,7 +244,7 @@ export default function Admin() {
                         const quill = e.target.getEditor();
                         const range = quill.getSelection();
                         // 在当前光标位置插入图片
-                        quill.insertEmbed(range ? range.index : 0, 'image', `http://localhost:3001${data.url}`);
+                        quill.insertEmbed(range ? range.index : 0, 'image', `${apiUrl.replace('/api','')}${data.url}`);
                       }
                     })
                     .catch(err => {
@@ -258,7 +263,7 @@ export default function Admin() {
               name="file"
               listType="picture-card"
               showUploadList={false}
-              action="http://localhost:3001/api/upload"
+              action={`${apiUrl}/upload`}
               beforeUpload={file => {
                 const isImg = file.type.startsWith('image/');
                 if (!isImg) {
@@ -274,7 +279,7 @@ export default function Admin() {
               }}
             >
               {form.getFieldValue('cover') ? (
-                <Image src={`http://localhost:3001${form.getFieldValue('cover')}`} width={80} />
+                <Image src={`${apiUrl.replace('/api','')}${form.getFieldValue('cover')}`} width={80} />
               ) : (
                 <div>
                   <PlusOutlined />
@@ -300,7 +305,7 @@ export default function Admin() {
               name="file"
               listType="picture-card"
               showUploadList={false}
-              action="http://localhost:3001/api/upload"
+              action={`${apiUrl}/upload`}
               beforeUpload={file => {
                 const isImg = file.type.startsWith('image/');
                 if (!isImg) {
@@ -316,7 +321,7 @@ export default function Admin() {
               }}
             >
               {profileForm.getFieldValue('avatar') ? (
-                <Image src={`http://localhost:3001${profileForm.getFieldValue('avatar')}`} width={80} />
+                <Image src={`${apiUrl.replace('/api','')}${profileForm.getFieldValue('avatar')}`} width={80} />
               ) : (
                 <div>
                   <PlusOutlined />
