@@ -15,12 +15,9 @@ export default function ArticleDetail() {
   const [likes, setLikes] = useState(0);
   const [likeAnim, setLikeAnim] = useState(false);
   
-  // 获取API基础URL
-  const apiBaseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : 'https://bestpossible.space';
-
   useEffect(() => {
     // 获取文章详情
-    instance.get(`/api/article/${id}`).then(res => {
+    instance.get(`/article/${id}`).then(res => {
       if (res.data.code === 0) {
         setArticle(res.data.data || {});
         setLikes(res.data.data.likes || 0);
@@ -31,13 +28,13 @@ export default function ArticleDetail() {
     });
     
     // 获取个人信息
-    instance.get('/api/profile').then(res => setProfile(res.data.data || {}));
+    instance.get('/profile').then(res => setProfile(res.data.data || {}));
   }, [id, navigate]);
 
   const handleLike = () => {
     setLikeAnim(true);
     setLikes(likes + 1); // 本地立即+1
-    instance.post(`/api/article/${id}/like`).then(res => {
+    instance.post(`/article/${id}/like`).then(res => {
       if (res.data.code === 0) setLikes(res.data.likes);
     });
     setTimeout(() => setLikeAnim(false), 500); // 动画500ms
@@ -52,7 +49,8 @@ export default function ArticleDetail() {
   const getImageUrl = (path) => {
     if (!path) return '';
     if (path.startsWith('http')) return path;
-    return `${apiBaseUrl}${path}`;
+    if (path.startsWith('/uploads/')) return path;
+    return `/uploads/${path.replace(/^\/+/, '')}`;
   };
 
   // 格式化日期

@@ -5,7 +5,15 @@ module.exports = async (req, res, next) => {
   const isBlogVisit = req.path === '/' || req.path.startsWith('/api/article') || req.path.startsWith('/api/blog');
   const isLoginVisit = req.path === '/api/user/login';
   if (isBlogVisit || isLoginVisit) {
-    const ip = req.ip;
+    // 优先获取真实IP
+    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.ip;
+    if (ip && ip.includes(',')) {
+      ip = ip.split(',')[0].trim(); // 取第一个IP
+    }
+    // 兼容IPv6 ::ffff:127.0.0.1
+    if (ip && ip.startsWith('::ffff:')) {
+      ip = ip.replace('::ffff:', '');
+    }
     const path = req.originalUrl;
     const method = req.method;
     const userAgent = req.headers['user-agent'] || '';

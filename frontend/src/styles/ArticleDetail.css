@@ -127,7 +127,7 @@
   line-height: 1.5;
 }
 
-/* 文章内容样式 */
+/* 文章内容样式 - 增强富文本展示 */
 .article-content {
   font-size: 17px;
   line-height: 1.8;
@@ -139,11 +139,13 @@
 
 .article-content h1,
 .article-content h2,
-.article-content h3 {
+.article-content h3,
+.article-content h4 {
   margin-top: 1.8em;
   margin-bottom: 0.8em;
   font-weight: 600;
   color: #222;
+  line-height: 1.4;
 }
 
 .article-content h1 {
@@ -158,14 +160,34 @@
   font-size: 1.3em;
 }
 
+.article-content h4 {
+  font-size: 1.2em;
+}
+
 .article-content p {
   margin: 1.2em 0;
   line-height: 1.8;
 }
 
-.article-content strong {
+.article-content strong,
+.article-content b {
   font-weight: 600;
   color: #222;
+}
+
+.article-content em,
+.article-content i {
+  font-style: italic;
+}
+
+.article-content u {
+  text-decoration: underline;
+}
+
+.article-content s,
+.article-content strike {
+  text-decoration: line-through;
+  color: #666;
 }
 
 .article-content blockquote {
@@ -196,8 +218,19 @@
   margin: 1.2em 0;
 }
 
+.article-content ul li {
+  list-style-type: disc;
+  margin-bottom: 0.5em;
+}
+
+.article-content ol li {
+  list-style-type: decimal;
+  margin-bottom: 0.5em;
+}
+
 .article-content li {
   margin-bottom: 0.5em;
+  line-height: 1.8;
 }
 
 .article-content img {

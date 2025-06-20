@@ -31,9 +31,17 @@ exports.getLogs = async (req, res) => {
       countParams.push(endDate);
     }
     
-    // 添加排序和分页
-    query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
-    params.push(pageSize, (page - 1) * pageSize);
+    // 添加排序和分页，分页参数直接拼接到SQL字符串
+    const offset = Number((page - 1) * pageSize);
+    const limit = Number(pageSize);
+    query += ` ORDER BY created_at DESC LIMIT ${offset}, ${limit}`;
+    // params 只传日期相关
+    
+    // 输出SQL和参数
+    console.log('[访客日志SQL]', query);
+    console.log('[访客日志参数]', params);
+    console.log('[访客日志统计SQL]', countQuery);
+    console.log('[访客日志统计参数]', countParams);
     
     // 执行查询
     const [logs] = await db.execute(query, params);
@@ -52,8 +60,8 @@ exports.getLogs = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('获取访客日志失败:', error);
-    res.json({ code: 1, msg: '获取访客日志失败' });
+    console.error('【获取访客日志失败 - catch】', error);
+    res.json({ code: 1, msg: '获取访客日志失败', error: error.message, stack: error.stack });
   }
 };
 

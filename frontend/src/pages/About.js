@@ -8,15 +8,14 @@ export default function About() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    instance.get('/api/profile').then(res => setProfile(res.data.data || {}));
+    instance.get('/profile').then(res => setProfile(res.data.data || {}));
   }, []);
 
-  // 获取API基础URL
-  const apiBaseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : 'https://bestpossible.space';
   const getImageUrl = (path) => {
     if (!path) return '';
     if (path.startsWith('http')) return path;
-    return `${apiBaseUrl}${path}`;
+    if (path.startsWith('/uploads/')) return path;
+    return `/uploads/${path.replace(/^\/+/, '')}`;
   };
 
   return (

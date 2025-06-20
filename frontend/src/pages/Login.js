@@ -9,7 +9,7 @@ export default function Login() {
 
   const onFinish = values => {
     setLoading(true);
-    instance.post('/api/user/login', values).then(res => {
+    instance.post('/user/login', values).then(res => {
       setLoading(false);
       if (res.data.code === 0) {
         localStorage.setItem('token', res.data.token);

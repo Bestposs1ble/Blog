@@ -37,7 +37,7 @@ export default function Logs() {
   const fetchLogs = (page = 1, pageSize = 10) => {
     setLoading(true);
     
-    let url = `/api/log?page=${page}&pageSize=${pageSize}`;
+    let url = `/log?page=${page}&pageSize=${pageSize}`;
     if (dateRange && dateRange[0] && dateRange[1]) {
       url += `&startDate=${dateRange[0].format('YYYY-MM-DD')}&endDate=${dateRange[1].format('YYYY-MM-DD')}`;
     }
@@ -62,7 +62,7 @@ export default function Logs() {
   
   // 获取统计数据
   const fetchStats = () => {
-    instance.get('/api/log/stats').then(res => {
+    instance.get('/log/stats').then(res => {
       if (res.data.code === 0) {
         setStats(res.data.data || {
           today: 0,

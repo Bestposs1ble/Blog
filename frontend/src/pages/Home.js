@@ -15,7 +15,8 @@ const apiBaseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:30
 const getImageUrl = (path) => {
   if (!path) return '';
   if (path.startsWith('http')) return path;
-  return `${apiBaseUrl}${path}`;
+  if (path.startsWith('/uploads/')) return path;
+  return `/uploads/${path.replace(/^\/+/, '')}`;
 };
 
 function formatDate(dateStr) {
@@ -34,7 +35,7 @@ function ArticleCard({ item, dark }) {
     setLikeAnim(true);
     setIsClicked(true);
     setLikes(likes + 1);
-    instance.post(`/api/article/${item.id}/like`).then(res => {
+    instance.post(`/article/${item.id}/like`).then(res => {
       if (res.data.code === 0) setLikes(res.data.likes);
     });
     setTimeout(() => setLikeAnim(false), 500);
@@ -83,20 +84,23 @@ function ArticleCard({ item, dark }) {
       >
         {item.title}
       </div>
-      <div style={{
-        color: dark ? '#a8a8a8' : '#888',
-        fontSize: 15,
-        lineHeight: 1.7,
-        marginTop: 6,
-        maxHeight: 44,
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        display: '-webkit-box',
-        WebkitLineClamp: 2,
-        WebkitBoxOrient: 'vertical'
-      }}>
-        {item.content.replace(/<[^>]+>/g, '')}
-      </div>
+      <div 
+        style={{
+          color: dark ? '#a8a8a8' : '#888',
+          fontSize: 15,
+          lineHeight: 1.7,
+          marginTop: 6,
+          maxHeight: 44,
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical'
+        }}
+        dangerouslySetInnerHTML={{ 
+          __html: item.content ? item.content.substring(0, 150) : '' 
+        }}
+      />
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
@@ -166,8 +170,8 @@ export default function Home() {
 
   useEffect(() => {
     // 获取个人信息和文章列表
-    instance.get('/api/profile').then(res => setProfile(res.data.data || {}));
-    instance.get('/api/article').then(res => setArticles(res.data.data || []));
+    instance.get('/profile').then(res => setProfile(res.data.data || {}));
+    instance.get('/article').then(res => setArticles(res.data.data || [])); // 保证原始数据
   }, []);
 
   // 最新/热门文章
@@ -195,14 +199,7 @@ export default function Home() {
     <Menu>
       <Menu.Item key="about" onClick={() => navigate('/about')}>关于我</Menu.Item>
       {localStorage.getItem('token') && (
-        <>
-          <Menu.Item key="admin" onClick={() => navigate('/admin')}>管理后台</Menu.Item>
-          <Menu.Item key="logout" onClick={() => {
-            localStorage.removeItem('token');
-            message.success('已退出登录');
-            navigate('/');
-          }}>退出登录</Menu.Item>
-        </>
+        <Menu.Item key="admin" onClick={() => navigate('/admin')}>管理后台</Menu.Item>
       )}
       {!localStorage.getItem('token') && (
         <Menu.Item key="login" onClick={() => navigate('/login')}>登录管理系统</Menu.Item>
@@ -307,7 +304,7 @@ export default function Home() {
         color: dark ? '#888' : 'inherit',
         borderTop: dark ? '1px solid #303030' : '1px solid #f0f0f0'
       }}>
-        © {new Date().getFullYear()} 何雨晨 | Powered by React & Ant Design
+        © {new Date().getFullYear()}  Bestpossible
       </Footer>
     </Layout>
   );
