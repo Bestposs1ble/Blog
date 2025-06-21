@@ -107,7 +107,7 @@ export default function Admin() {
           console.log('从DOM获取编辑器内容:', finalContent.substring(0, 50));
         } else if (quillEditorRef.current) {
           // 备用方法：从ref获取内容
-          try {
+        try {
             const quillEditor = quillEditorRef.current.getEditor();
             if (quillEditor && quillEditor.root) {
               finalContent = quillEditor.root.innerHTML;
@@ -137,8 +137,8 @@ export default function Admin() {
           console.log('纯文本内容检查:', textContent.trim(), hasContent);
         } catch (e) {
           console.error('纯文本检查失败:', e);
-        }
-        
+      }
+      
         // 方法2：检查是否有图片
         if (!hasContent) {
           hasContent = finalContent.includes('<img');
@@ -150,47 +150,47 @@ export default function Admin() {
           finalContent = '<p><br></p>';
           message.warning('文章内容不能为空');
           return;
-        }
-        
-        // 最终提交的数据
-        const submitData = {
-          ...values,
+      }
+      
+      // 最终提交的数据
+      const submitData = {
+        ...values,
           content: finalContent || '<p><br></p>'
-        };
-        
-        // 处理空封面
-        if (!submitData.cover) submitData.cover = null;
-        
-        console.log('准备提交文章数据:', {
-          title: submitData.title,
-          contentLength: submitData.content.length,
+      };
+      
+      // 处理空封面
+      if (!submitData.cover) submitData.cover = null;
+      
+      console.log('准备提交文章数据:', {
+        title: submitData.title,
+        contentLength: submitData.content.length,
           contentHasData: submitData.content !== '<p><br></p>',
-          contentPreview: submitData.content.substring(0, 30),
-          cover: submitData.cover
-        });
-        
+        contentPreview: submitData.content.substring(0, 30),
+        cover: submitData.cover
+      });
+      
         // 提交数据
-        if (editing) {
-          // 编辑
+      if (editing) {
+        // 编辑
           const response = await instance.put(`/article/${editing.id}`, submitData);
           if (response.data.code === 0) {
-            message.success('修改成功');
-            setModalOpen(false);
-            setEditing(null);
-            fetchArticles();
-          } else {
+              message.success('修改成功');
+              setModalOpen(false);
+              setEditing(null);
+              fetchArticles();
+            } else {
             message.error('修改失败: ' + (response.data.msg || '未知错误'));
-          }
-        } else {
-          // 新增
+            }
+      } else {
+        // 新增
           const response = await instance.post('/article', submitData);
           if (response.data.code === 0) {
-            message.success('新增成功');
-            setModalOpen(false);
-            fetchArticles();
-          } else {
+              message.success('新增成功');
+              setModalOpen(false);
+              fetchArticles();
+            } else {
             message.error('新增失败: ' + (response.data.msg || '未知错误'));
-          }
+            }
         }
       } catch (err) {
         console.error('提交文章请求失败:', err);
@@ -248,14 +248,14 @@ export default function Admin() {
           });
           
           // 确保编辑器内容已正确设置
-          if (quillEditorRef.current) {
-            try {
-              const editor = quillEditorRef.current.getEditor();
-              if (editor && editor.root) {
+        if (quillEditorRef.current) {
+          try {
+            const editor = quillEditorRef.current.getEditor();
+            if (editor && editor.root) {
                 // 先清空再设置内容，避免格式问题
                 editor.root.innerHTML = '';
                 setTimeout(() => {
-                  editor.root.innerHTML = safeContent;
+                editor.root.innerHTML = safeContent;
                 }, 50);
               }
             } catch (e) {
